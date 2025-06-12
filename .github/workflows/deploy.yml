@@ -15,14 +15,14 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build
 
-      - name: Copy JAR to EC2
+      - name: Copy JAR to EC2 (flatten path)
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_KEY }}
           source: build/libs/app.jar
-          target: /home/ubuntu/
+          target: /home/ubuntu/app.jar  # 디렉토리가 아닌 파일 경로로 명시
 
       - name: Run on EC2
         uses: appleboy/ssh-action@v1.0.0
@@ -32,4 +32,4 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           script: |
             pkill -f 'java -jar' || true
-            nohup java -jar ~/build/libs/app.jar > ~/log.txt 2>&1 & disown
+            nohup java -jar ~/app.jar > ~/log.txt 2>&1 & disown
