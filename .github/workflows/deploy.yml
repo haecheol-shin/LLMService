@@ -33,4 +33,5 @@ jobs:
           script_stop: false # <-- 중요!
           script: |
             pkill -f 'java -jar' || true
-            nohup java -jar app.jar > log.txt 2>&1 &
+            nohup java -jar /home/ubuntu/app.jar > /home/ubuntu/log.txt 2>&1 & disown
+            echo "App started"
