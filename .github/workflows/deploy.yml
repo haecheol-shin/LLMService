@@ -22,7 +22,7 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_KEY }}
           source: build/libs/app.jar
-          target: /home/ubuntu/app.jar
+          target: ~/
 
       - name: Run on EC2
         uses: appleboy/ssh-action@v1.0.0
@@ -30,8 +30,6 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_KEY }}
-          script_stop: false # <-- 중요!
           script: |
             pkill -f 'java -jar' || true
-            nohup java -jar /home/ubuntu/app.jar > /home/ubuntu/log.txt 2>&1 & disown
-            echo "App started"
+            nohup java -jar ~/build/libs/app.jar > log.txt 2>&1 &
